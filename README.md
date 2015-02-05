@@ -10,6 +10,7 @@ Set up selenium in Debian-like systems.
 
 * `selenium_install_dir`: [default: `/opt`] Install directory
 * `selenium_version`: [default: `2.44.0`] Install version
+* `selenium_run_xvfb`: [default: `true`] Automatically run Xvfb
 
 ## Dependencies
 
