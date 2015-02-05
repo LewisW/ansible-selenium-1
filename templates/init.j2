@@ -6,7 +6,13 @@ PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
 DISPLAY_ID=":99"
 RUN_AS=root
 
-JAVA_BIN="{% if selenium_run_xvfb %}usr/bin/xvfb-run {% endif %}/usr/bin/java"
+{% if selenium_run_xvfb %}
+JAVA_BIN="usr/bin/xvfb-run"
+JAVA_OPTS=" --server-args='-screen 0, 1024x768x24' usr/bin/java"
+{% else %}
+JAVA_BIN="usr/bin/java"
+JAVA_OPTS=""
+{% endif %}
 
 SELENIUM_DIR={{ selenium_install_dir }}/selenium
 SELENIUM_PID_FILE="$SELENIUM_DIR/selenium.pid"
@@ -27,7 +33,7 @@ case "$1" in
         else
             log_daemon_msg "Starting Selenium server"
             log_progress_msg "selenium"
-            start-stop-daemon -c $RUN_AS --start --quiet --background --pidfile $SELENIUM_PID_FILE --make-pidfile --exec $JAVA_BIN -- $SELENIUM_DAEMON_OPTS
+            start-stop-daemon -c $RUN_AS --start --quiet --background --pidfile $SELENIUM_PID_FILE --make-pidfile --exec $JAVA_BIN -- $JAVA_OPTS $SELENIUM_DAEMON_OPTS
         fi
         ;;
 
